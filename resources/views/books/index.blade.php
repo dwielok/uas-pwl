@@ -77,6 +77,7 @@
                                             <th>Author</th>
                                             <th>Publication Date</th>
                                             <th>User</th>
+                                            <th>Status</th>
                                             <th class="text-right">Action</th>
                                         </tr>
                                         @foreach ($books as $key => $book)
@@ -87,6 +88,7 @@
                                                 <td>{{ $book->author }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($book->publication_date)) }}</td>
                                                 <td>{{ $book->name }}</td>
+                                                <td>{{$book->status==1?"Tersedia":"Dipinjam"}}</td>
                                                 <td class="text-right">
                                                     <div class="d-flex justify-content-end">
                                                         <a href="{{ route('book.edit', $book->id) }}"
