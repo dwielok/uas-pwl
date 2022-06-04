@@ -4,6 +4,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Menu\MenuGroupController;
 use App\Http\Controllers\Menu\MenuItemController;
+use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\RoleAndPermission\AssignPermissionController;
 use App\Http\Controllers\RoleAndPermission\AssignUserToRoleController;
 use App\Http\Controllers\RoleAndPermission\ExportPermissionController;
@@ -79,5 +80,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('book', BookController::class);
         Route::post('import', [BookController::class, 'import'])->name('book.import');
         Route::get('export', [BookController::class, 'export'])->name('book.export');
+    });
+    Route::prefix('peminjaman-management')->group(function () {
+        Route::resource('peminjaman', PeminjamanController::class);
+        Route::post('import', [PeminjamanController::class, 'import'])->name('peminjaman.import');
+        Route::get('export', [PeminjamanController::class, 'export'])->name('peminjaman.export');
     });
 });
