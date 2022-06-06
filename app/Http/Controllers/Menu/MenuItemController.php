@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Menu;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreMenuItemRequest;
+use App\Http\Requests\UpdateMenuItemRequest;
 use App\Models\MenuGroup;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Permission;
 
 class MenuItemController extends Controller
 {
@@ -42,7 +45,8 @@ class MenuItemController extends Controller
         //
         $routeCollection = Route::getRoutes();
         $menuGroups = MenuGroup::all();
-        return view('menu.menu-item.create', compact('routeCollection', 'menuGroups'));
+        $permission = Permission::all();
+        return view('menu.menu-item.create', compact('routeCollection', 'menuGroups', 'permission'));
     }
 
     /**
@@ -51,9 +55,10 @@ class MenuItemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMenuItemRequest $request)
     {
-        //
+        MenuItem::create($request->validated());
+        return redirect(route('menu-item.index'))->with('success', 'Data berhasil ditambahkan');
     }
 
     /**
@@ -75,7 +80,7 @@ class MenuItemController extends Controller
      */
     public function edit(MenuItem $menuItem)
     {
-        //
+        return view('menu.menu-item.edit', compact('menuItem'));
     }
 
     /**
@@ -85,9 +90,10 @@ class MenuItemController extends Controller
      * @param  \App\Models\MenuItem  $menuItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MenuItem $menuItem)
+    public function update(UpdateMenuItemRequest $request, MenuItem $menuItem)
     {
-        //
+        $menuItem->update($request->validated());
+        return redirect()->route('menu-group.index')->with('success', 'Data berhasil diubah');
     }
 
     /**
@@ -98,6 +104,7 @@ class MenuItemController extends Controller
      */
     public function destroy(MenuItem $menuItem)
     {
-        //
+        $menuItem->delete();
+        return redirect()->route('menu-item.index')->with('success', 'Menu Item Deleted Successfully');
     }
 }
