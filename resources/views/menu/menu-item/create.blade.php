@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <section class="section">
         <div class="section-header">
             <h1>Menu Group and Menu Item</h1>
@@ -29,6 +28,11 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('menu_group_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="name">Menu Item Name</label>
@@ -42,14 +46,32 @@
                         </div>
                         <div class="form-group">
                             <label>Url</label>
-                            <select class="form-control select2" name="url">
+                            <select class="form-control select2" name="route">
                                 <option value="">Choose Url</option>
                                 @foreach ($routeCollection as $item)
                                     <option value="{{ $item->uri() }}">{{ $item->uri() }}</option>
                                 @endforeach
                             </select>
+                            @error('route')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
-
+                        <div class="form-group">
+                            <label>Permission</label>
+                            <select class="form-control select2" name="permission_name">
+                                <option value="">Choose Permission</option>
+                                @foreach ($permission as $item)
+                                    <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('permission_name')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                 </div>
                 <div class="card-footer text-right">
                     <button class="btn btn-primary">Submit</button>

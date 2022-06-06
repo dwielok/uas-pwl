@@ -1,107 +1,125 @@
-@extends('layouts.app')
+<?php
 
-@section('content')
-    <section class="section">
-        <div class="section-header">
-            <h1>Table</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="#">Components</a></div>
-                <div class="breadcrumb-item">Table</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <h2 class="section-title">Tambah Peminjaman</h2>
+namespace App\Http\Controllers;
 
-            <div class="card">
-                <div class="card-header">
-                    <h4>Validasi Tambah Data</h4>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('peminjaman.store') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label>Peminjam</label>
-                            <select class="form-control select2" name="id_user">
-                                <option value="">Choose User</option>
-                                @foreach ($users as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Buku</label>
-                            <select class="form-control select2" name="id_buku">
-                                <option value="">Choose Book</option>
-                                @foreach ($books as $item)
-                                    <option value="{{ $item->id }}">{{ $item->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="tanggal_pinjam">Tanggal Pinjam</label>
-                            <input type="date" class="form-control @error('tanggal_pinjam') is-invalid @enderror"
-                                id="tanggal_pinjam" name="tanggal_pinjam">
-                            @error('tanggal_pinjam')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="tanggal_batas_kembali">Tanggal Batas Kembali</label>
-                            <input type="date" class="form-control @error('tanggal_batas_kembali') is-invalid @enderror"
-                                id="tanggal_batas_kembali" name="tanggal_batas_kembali">
-                            @error('tanggal_batas_kembali')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                </div>
-                <div class="card-footer text-right">
-                    <button class="btn btn-primary">Submit</button>
-                    <a class="btn btn-secondary" href="{{ route('book.index') }}">Cancel</a>
-                </div>
-                </form>
-            </div>
-        </div>
-    </section>
-@endsection
-@push('customScript')
-    <script src="/assets/js/select2.min.js"></script>
-    <script>
-        Date.prototype.addDays = function(days) {
-            var date = new Date(this.valueOf());
-            date.setDate(date.getDate() + days);
-            return date;
-        }
+use App\Http\Requests\StorePeminjamanRequest;
+use App\Http\Requests\UpdatePeminjamanRequest;
+use App\Models\Book;
+use App\Models\Peminjaman;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-        function formatDate(date) {
-            var d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
+class PeminjamanController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:peminjaman.index')->only('index');
+        $this->middleware('permission:peminjaman.create')->only('create', 'store');
+        $this->middleware('permission:peminjaman.edit')->only('edit', 'update');
+        $this->middleware('permission:peminjaman.destroy')->only('destroy');
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $peminjamans = DB::table('peminjaman')
+            ->when($request->input('title'), function ($query, $name) {
+                return $query->where('peminjaman.kode', 'like', '%' . $name . '%');
+            })
+            ->join('book', 'book.id', '=', 'peminjaman.id_buku')
+            ->join('users', 'users.id', '=', 'peminjaman.id_user')
+            ->select('peminjaman.id', 'peminjaman.kode', 'users.name as nama_peminjam', 'book.title as judul_buku', 'book.isbn', DB::raw("DATE(peminjaman.tanggal_pinjam) as tanggal_pinjam"), DB::raw("DATE(peminjaman.tanggal_batas_kembali) as tanggal_batas_kembali"))
+            ->paginate(10);
+        return view('peminjaman.index', compact('peminjamans'));
+    }
 
-            if (month.length < 2)
-                month = '0' + month;
-            if (day.length < 2)
-                day = '0' + day;
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $users = User::all();
+        $books = Book::all();
+        return view('peminjaman.create', compact('users', 'books'));
+    }
 
-            return [year, month, day].join('-');
-        }
-        $(document).ready(function() {
-            $(document).on("change", "#tanggal_pinjam", function() {
-                let date_start = $(this).val();
-                const firstDate = new Date(date_start);
-                // console.log(firstDate.addDays(7));
-                // console.log(formatDate(firstDate.addDays(7)));
-                $("#tanggal_batas_kembali").val(formatDate(firstDate.addDays(7)));
-            });
-        });
-    </script>
-@endpush
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StorePeminjamanRequest $request)
+    {
+        $rand = rand(1231, 7879);
+        $code = 'LIB' . $rand;
+        Peminjaman::create([
+            'kode' => $code,
+            'id_user' => $request['id_user'],
+            'id_buku' => $request['id_buku'],
+            'tanggal_pinjam' => $request['tanggal_pinjam'],
+            'tanggal_batas_kembali' => $request['tanggal_batas_kembali'],
+        ]);
+        Book::where('id', $request['id_buku'])->update(['status' => 0]);
+        return redirect(route('peminjaman.index'))->with('success', 'Data Berhasil Ditambahkan');;
+    }
 
-@push('customStyle')
-    <link rel="stylesheet" href="/assets/css/select2.min.css">
-@endpush
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Peminjaman $peminjaman)
+    {
+        $users = User::all();
+        $books = Book::all();
+        return view('peminjaman.edit', compact('books', 'users', 'peminjaman'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdatePeminjamanRequest $request, Peminjaman $peminjaman)
+    {
+        $validate = $request->validated();
+
+        $peminjaman->update($validate);
+        return redirect()->route('peminjaman.index')->with('success', 'Peminjaman Berhasil Diupdate');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Peminjaman $peminjaman)
+    {
+        //
+        $peminjaman->delete();
+        return redirect()->route('peminjaman.index')->with('success', 'Peminjaman Deleted Successfully');
+    }
+}
