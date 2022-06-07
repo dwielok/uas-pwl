@@ -90,5 +90,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::prefix('peminjaman-user-management')->group(function () {
         Route::resource('peminjaman_user', PeminjamanUserController::class);
     });
+    Route::prefix('book-user')->group(function () {
+        Route::resource('peminjaman_user', PeminjamanUserController::class);
+    });
 
 });
