@@ -5,6 +5,7 @@ use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Menu\MenuGroupController;
 use App\Http\Controllers\Menu\MenuItemController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PeminjamanUserController;
 use App\Http\Controllers\RoleAndPermission\AssignPermissionController;
 use App\Http\Controllers\RoleAndPermission\AssignUserToRoleController;
 use App\Http\Controllers\RoleAndPermission\ExportPermissionController;
@@ -86,4 +87,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('import', [PeminjamanController::class, 'import'])->name('peminjaman.import');
         Route::get('export', [PeminjamanController::class, 'export'])->name('peminjaman.export');
     });
+    Route::prefix('peminjaman-user-management')->group(function () {
+        Route::resource('peminjaman_user', PeminjamanUserController::class);
+    });
+
 });
