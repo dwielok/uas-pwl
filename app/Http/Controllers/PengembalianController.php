@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePengembalianRequest;
+use App\Http\Requests\UpdatePengembalianRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Book;
+use App\Models\Denda;
+use App\Models\Peminjaman;
+use App\Models\Pengembalian;
 
 class PengembalianController extends Controller
 {
@@ -41,7 +47,8 @@ class PengembalianController extends Controller
      */
     public function create()
     {
-        //
+        $peminjamans = Peminjaman::all();
+        return view('pengembalian.create', compact('peminjamans'));
     }
 
     /**
@@ -50,9 +57,27 @@ class PengembalianController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePengembalianRequest $request)
     {
-        //
+        $id_peminjaman = explode('#', $request->id_peminjaman)[0];
+        $pengembalian = Pengembalian::create([
+            'id_peminjaman' => $id_peminjaman,
+            'tanggal_kembali' => $request->tanggal_kembali,
+            'status' => $request->status,
+        ]);
+        $book = Peminjaman::where('id', $id_peminjaman)->first();
+        Book::where('id', $book->id_buku)->update(['status' => 1]);
+        if($request->status == 0){
+            Denda::create([
+                'id_peminjaman' => $id_peminjaman,
+                'id_pengembalian' => $pengembalian->id,
+                'id_buku' => $book->id_buku,
+                'id_user' => $book->id_user,
+                'denda' => $request->total_hari * 50000,
+                'status' => 0
+            ]);
+        }
+        return redirect(route('pengembalian.index'))->with('success', 'Data Berhasil Ditambahkan');;
     }
 
     /**
@@ -72,9 +97,10 @@ class PengembalianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Pengembalian $pengembalian)
     {
-        //
+        $peminjamans = Peminjaman::where('id', $pengembalian->id_peminjaman)->first();
+        return view('pengembalian.edit', compact('peminjamans', 'pengembalian'));
     }
 
     /**
@@ -84,9 +110,34 @@ class PengembalianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePengembalianRequest $request, Pengembalian $pengembalian)
     {
-        //
+        $validate = $request->validated();
+
+        $pengembalian->update($validate);
+
+        if($request->status == 0){
+            $denda = Denda::where('id_pengembalian', $pengembalian->id)->count();
+            if($denda == 0){
+                $book = Peminjaman::where('id', $pengembalian->id_peminjaman)->first();
+                Denda::create([
+                    'id_peminjaman' => $pengembalian->id_peminjaman,
+                    'id_pengembalian' => $pengembalian->id,
+                    'id_buku' => $book->id_buku,
+                    'id_user' => $book->id_user,
+                    'denda' => $request->total_hari * 50000,
+                    'status' => 0
+                ]);
+            } else {
+                Denda::where('id_pengembalian', $pengembalian->id)->update([
+                    'denda' => $request->total_hari * 50000,
+                    'status' => 0
+                ]);
+            }
+        }else {
+            Denda::where('id_pengembalian', $pengembalian->id)->delete();
+        }
+        return redirect(route('pengembalian.index'))->with('success', 'Data Berhasil Diedit');;
     }
 
     /**
@@ -95,8 +146,10 @@ class PengembalianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Pengembalian $pengembalian)
     {
-        //
+        $pengembalian->delete();
+        Denda::where('id_peminjaman', $pengembalian->id_peminjaman)->delete();
+        return redirect()->route('pengembalian.index')->with('success', 'Pengembalian Deleted Successfully');
     }
 }

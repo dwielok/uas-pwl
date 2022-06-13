@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DemoController;
+use App\Http\Controllers\DendaController;
 use App\Http\Controllers\Menu\MenuGroupController;
 use App\Http\Controllers\Menu\MenuItemController;
 use App\Http\Controllers\PeminjamanController;
@@ -98,6 +99,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     });
     Route::prefix('book-user')->group(function () {
         Route::resource('peminjaman_user', PeminjamanUserController::class);
+    });
+    Route::prefix('denda-management')->group(function () {
+        Route::resource('denda', DendaController::class);
+        Route::patch('ubah_status/{denda}', [DendaController::class, 'ubah_status'])->name('denda.ubah_status');
     });
 
 });
