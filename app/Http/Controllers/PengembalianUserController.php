@@ -15,6 +15,11 @@ class PengembalianUserController extends Controller
         $this->middleware('permission:pengembalian.edit')->only('edit', 'update');
         $this->middleware('permission:pengembalian.destroy')->only('destroy');
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
 
     public function index(Request $request)
     {
@@ -29,4 +34,5 @@ class PengembalianUserController extends Controller
             ->paginate(10);
         return view('pengembalian_user.index', compact('pengembalians'));
     }
+    
 }

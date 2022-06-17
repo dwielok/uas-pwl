@@ -25,9 +25,9 @@
                         <div class="card-header">
                             <h4>List Pengembalian</h4>
                             <div class="card-header-action">
-                                <a class="btn btn-icon icon-left btn-primary"
-                                    href="{{ route('pengembalian.create') }}">Create New
-                                    Pengembalian</a>
+                                {{-- <a class="btn btn-icon icon-left btn-primary" --}}
+                                    {{-- href="{{ route('pengembalian.create') }}">Create New
+                                    Pengembalian</a> --}}
                                 {{-- <a class="btn btn-info btn-primary active import">
                                     <i class="fa fa-download" aria-hidden="true"></i>
                                     Import Book</a>
@@ -55,7 +55,7 @@
                                 </div>
                             </div>
                             <div class="show-search mb-3" style="display: none">
-                                <form id="search" method="GET" action="{{ route('pengembalian.index') }}">
+                                <form id="search" method="GET" action="{{ route('pengembalian_user.index') }}">
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label for="role">Kode</label>
@@ -65,7 +65,7 @@
                                     </div>
                                     <div class="text-right">
                                         <button class="btn btn-primary mr-1" type="submit">Submit</button>
-                                        <a class="btn btn-secondary" href="{{ route('pengembalian.index') }}">Reset</a>
+                                        <a class="btn btn-secondary" href="{{ route('pengembalian_user.index') }}">Reset</a>
                                     </div>
                                 </form>
                             </div>
@@ -96,7 +96,7 @@
                                                 <td>{{ date('d-m-Y', strtotime($pengembalian->tanggal_batas_kembali)) }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($pengembalian->tanggal_kembali)) }}</td>
                                                 <td>{{ $pengembalian->status == 0?'Terlambat':'Tepat Waktu'}}</td>
-                                                <td class="text-right">
+                                                {{-- <td class="text-right"> --}}
                                                     {{-- <div class="d-flex justify-content-end">
                                                         <a href="{{ route('pengembalian.edit', $pengembalian->id) }}"
                                                             class="btn btn-sm btn-info btn-icon "><i
