@@ -8,6 +8,7 @@ use App\Http\Controllers\Menu\MenuItemController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
 use App\Http\Controllers\PeminjamanUserController;
+use App\Http\Controllers\PengembalianUserController;
 use App\Http\Controllers\RoleAndPermission\AssignPermissionController;
 use App\Http\Controllers\RoleAndPermission\AssignUserToRoleController;
 use App\Http\Controllers\RoleAndPermission\ExportPermissionController;
@@ -105,4 +106,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::patch('ubah_status/{denda}', [DendaController::class, 'ubah_status'])->name('denda.ubah_status');
     });
 
+    Route::prefix('pengembalian-user-management')->group(function () {
+        Route::resource('pengembalian_user', PengembalianUserController::class);
+    });
 });
