@@ -30,7 +30,8 @@ class PengembalianUserController extends Controller
             ->join('peminjaman', 'peminjaman.id', '=', 'pengembalian.id_peminjaman')
             ->join('book', 'book.id', '=', 'peminjaman.id_buku')
             ->join('users', 'users.id', '=', 'peminjaman.id_user')
-            ->select('pengembalian.id_user', 'peminjaman.kode', 'users.name as nama_peminjam', 'book.title as judul_buku', 'book.isbn',  DB::raw("DATE(peminjaman.tanggal_pinjam) as tanggal_pinjam"), DB::raw("DATE(peminjaman.tanggal_batas_kembali) as tanggal_batas_kembali"), DB::raw("DATE(pengembalian.tanggal_kembali) as tanggal_kembali"), 'pengembalian.status')
+            ->select('pengembalian.id', 'peminjaman.kode', 'users.name as nama_peminjam', 'book.title as judul_buku', 'book.isbn',  DB::raw("DATE(peminjaman.tanggal_pinjam) as tanggal_pinjam"), DB::raw("DATE(peminjaman.tanggal_batas_kembali) as tanggal_batas_kembali"), DB::raw("DATE(pengembalian.tanggal_kembali) as tanggal_kembali"), 'pengembalian.status')
+            ->where('peminjaman.id_user', '=', auth()->user()->id)
             ->paginate(10);
         return view('pengembalian_user.index', compact('pengembalians'));
     }
