@@ -10,10 +10,10 @@ class PengembalianUserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:pengembalian.index')->only('index');
-        $this->middleware('permission:pengembalian.create')->only('create', 'store');
-        $this->middleware('permission:pengembalian.edit')->only('edit', 'update');
-        $this->middleware('permission:pengembalian.destroy')->only('destroy');
+        $this->middleware('permission:pengembalian_user.index')->only('index');
+        $this->middleware('permission:pengembalian_user.create')->only('create', 'store');
+        $this->middleware('permission:pengembalian_user.edit')->only('edit', 'update');
+        $this->middleware('permission:pengembalian_user.destroy')->only('destroy');
     }
     /**
      * Display a listing of the resource.
