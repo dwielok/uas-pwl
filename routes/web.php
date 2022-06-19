@@ -113,7 +113,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::prefix('pengembalian-user-management')->group(function () {
         Route::resource('pengembalian_user', PengembalianUserController::class);
     });
-<<<<<<< HEAD
 
     Route::prefix('laporan-management/laporan')->group(function () {
         Route::get('peminjaman_per_user', [LaporanController::class, 'peminjaman_per_user'])->name('laporan.peminjaman_per_user');
@@ -123,6 +122,4 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('denda_per_user', [LaporanController::class, 'denda_per_user'])->name('laporan.denda_per_user');
         Route::get('{user}/denda_per_user_pdf', [LaporanController::class, 'denda_per_user_pdf'])->name('laporan.denda_per_user_pdf');
     });
-=======
->>>>>>> 919e97f358bb8b91424dd5ff65fb909b9dcf35b5
 });

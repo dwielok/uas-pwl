@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PeminjamanUserController extends Controller
+class BookListUserController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:peminjaman_user.index')->only('index');
+        $this->middleware('permission:books_user.index')->only('index');
 
     }
     /**
