@@ -11,4 +11,10 @@ class Pengembalian extends Model
     protected $table = 'pengembalian';
     protected $fillable = ['id_peminjaman', 'tanggal_kembali', 'status'];
     protected $dates = ['tanggal_kembali', 'created_at', 'update_at'];
+    public function denda()
+    {
+        return $this->hasOne(Denda::class, 'id_pengembalian', 'id')->withDefault([
+            'denda' => 0,
+        ]);
+    }
 }

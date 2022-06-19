@@ -77,6 +77,7 @@
                                             <th>Author</th>
                                             <th>Publication Date</th>
                                             <th>User</th>
+                                            <th>Gambar</th>
                                             <th>Status</th>
                                             <th class="text-right">Action</th>
                                         </tr>
@@ -88,6 +89,10 @@
                                                 <td>{{ $book->author }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($book->publication_date)) }}</td>
                                                 <td>{{ $book->name }}</td>
+                                                <td><a href="{{ url($book->image) }}" target="_blank"
+                                                        rel="noopener noreferrer">
+                                                        <img src="{{ url($book->image) }}" alt="asd"
+                                                            style="height: 50px;width:40px"></a></td>
                                                 <td>{{$book->status==1?"Tersedia":"Dipinjam"}}</td>
                                                 <td class="text-right">
                                                     <div class="d-flex justify-content-end">

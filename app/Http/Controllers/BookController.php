@@ -31,7 +31,7 @@ class BookController extends Controller
                 return $query->where('book.title', 'like', '%' . $name . '%');
             })
             ->join('users', 'users.id', '=', 'book.user_id')
-            ->select('book.id', 'book.isbn', 'book.title', 'book.author','book.status', 'book.read', 'users.name', DB::raw("DATE(book.publication_date) as publication_date"))
+            ->select('book.id', 'book.isbn', 'book.image', 'book.title', 'book.author', 'book.status', 'book.read', 'users.name', DB::raw("DATE(book.publication_date) as publication_date"))
             ->paginate(10);
         return view('books.index', compact('books'));
     }

@@ -47,7 +47,8 @@ class PengembalianController extends Controller
      */
     public function create()
     {
-        $peminjamans = Peminjaman::all();
+        $exist = Pengembalian::pluck('id_peminjaman')->toArray();
+        $peminjamans = Peminjaman::whereNotIn('id', $exist)->get();
         return view('pengembalian.create', compact('peminjamans'));
     }
 

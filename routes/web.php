@@ -1,13 +1,16 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookListUserController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\DendaController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Menu\MenuGroupController;
 use App\Http\Controllers\Menu\MenuItemController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
 use App\Http\Controllers\PeminjamanUserController;
+use App\Http\Controllers\PengembalianUserController;
 use App\Http\Controllers\RoleAndPermission\AssignPermissionController;
 use App\Http\Controllers\RoleAndPermission\AssignUserToRoleController;
 use App\Http\Controllers\RoleAndPermission\ExportPermissionController;
@@ -97,12 +100,26 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::prefix('peminjaman-user-management')->group(function () {
         Route::resource('peminjaman_user', PeminjamanUserController::class);
     });
-    Route::prefix('book-user')->group(function () {
-        Route::resource('peminjaman_user', PeminjamanUserController::class);
+    Route::prefix('book-user-management')->group(function () {
+        Route::resource('book-user', BookListUserController::class);
+        Route::get('{book}/pinjam', [BookListUserController::class, 'pinjam'])->name('book-user.pinjam');
+        Route::post('book/pinjam', [BookListUserController::class, 'pinjam_action'])->name('book-user.pinjam_action');
     });
     Route::prefix('denda-management')->group(function () {
         Route::resource('denda', DendaController::class);
         Route::patch('ubah_status/{denda}', [DendaController::class, 'ubah_status'])->name('denda.ubah_status');
     });
 
+    Route::prefix('pengembalian-user-management')->group(function () {
+        Route::resource('pengembalian_user', PengembalianUserController::class);
+    });
+
+    Route::prefix('laporan-management/laporan')->group(function () {
+        Route::get('peminjaman_per_user', [LaporanController::class, 'peminjaman_per_user'])->name('laporan.peminjaman_per_user');
+        Route::get('{user}/peminjaman_per_user_pdf', [LaporanController::class, 'peminjaman_per_user_pdf'])->name('laporan.peminjaman_per_user_pdf');
+        Route::get('pengembalian_per_user', [LaporanController::class, 'pengembalian_per_user'])->name('laporan.pengembalian_per_user');
+        Route::get('{user}/pengembalian_per_user_pdf', [LaporanController::class, 'pengembalian_per_user_pdf'])->name('laporan.pengembalian_per_user_pdf');
+        Route::get('denda_per_user', [LaporanController::class, 'denda_per_user'])->name('laporan.denda_per_user');
+        Route::get('{user}/denda_per_user_pdf', [LaporanController::class, 'denda_per_user_pdf'])->name('laporan.denda_per_user_pdf');
+    });
 });
