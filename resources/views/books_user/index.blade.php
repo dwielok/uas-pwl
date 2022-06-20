@@ -41,7 +41,8 @@
                         <div class="card-body">
                             <div class="show-import" style="display: none">
                                 <div class="custom-file">
-                                    <form action="{{ route('book.import') }}" method="post" enctype="multipart/form-data">
+                                    <form action="{{ route('book.import') }}" method="post"
+                                        enctype="multipart/form-data">
                                         {{ csrf_field() }}
                                         <label class="custom-file-label" for="file-upload">Choose File</label>
                                         <input type="file" id="file-upload" class="custom-file-input" name="import_file">
@@ -77,6 +78,7 @@
                                             <th>Author</th>
                                             <th>Publication Date</th>
                                             <th>User</th>
+                                            <th>Gambar</th>
                                             <th>Status</th>
                                             <th class="text-right">Action</th>
                                         </tr>
@@ -88,21 +90,19 @@
                                                 <td>{{ $book->author }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($book->publication_date)) }}</td>
                                                 <td>{{ $book->name }}</td>
-                                                <td>{{$book->status==1?"Tersedia":"Dipinjam"}}</td>
+                                                <td><a href="{{ url($book->image) }}" target="_blank"
+                                                        rel="noopener noreferrer">
+                                                        <img src="{{ url($book->image) }}" alt="asd"
+                                                            style="height: 50px;width:40px"></a></td>
+                                                <td>{{ $book->status == 1 ? 'Tersedia' : 'Dipinjam' }}</td>
                                                 <td class="text-right">
                                                     <div class="d-flex justify-content-end">
-                                                        <a href="{{ route('book.edit', $book->id) }}"
-                                                            class="btn btn-sm btn-info btn-icon "><i
-                                                                class="fas fa-edit"></i>
-                                                            Edit</a>
-                                                        <form action="{{ route('book.destroy', $book->id) }}"
-                                                            method="POST" class="ml-2">
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token"
-                                                                value="{{ csrf_token() }}">
-                                                            <button class="btn btn-sm btn-danger btn-icon "><i
-                                                                    class="fas fa-times"></i> Delete </button>
-                                                        </form>
+                                                        @if ($book->status == 1)
+                                                            <a href="{{ route('book-user.pinjam', $book->id) }}"
+                                                                class="btn btn-sm btn-info btn-icon "><i
+                                                                    class="fas fa-hand-holding"></i>
+                                                                Pinjam</a>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
