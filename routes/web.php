@@ -11,6 +11,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
 use App\Http\Controllers\PeminjamanUserController;
 use App\Http\Controllers\PengembalianUserController;
+use App\Http\Controllers\DendaUserController;
 use App\Http\Controllers\RoleAndPermission\AssignPermissionController;
 use App\Http\Controllers\RoleAndPermission\AssignUserToRoleController;
 use App\Http\Controllers\RoleAndPermission\ExportPermissionController;
@@ -121,5 +122,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('{user}/pengembalian_per_user_pdf', [LaporanController::class, 'pengembalian_per_user_pdf'])->name('laporan.pengembalian_per_user_pdf');
         Route::get('denda_per_user', [LaporanController::class, 'denda_per_user'])->name('laporan.denda_per_user');
         Route::get('{user}/denda_per_user_pdf', [LaporanController::class, 'denda_per_user_pdf'])->name('laporan.denda_per_user_pdf');
+    });
+
+    Route::prefix('denda-user-management')->group(function () {
+        Route::resource('denda_user', DendaUserController::class);
     });
 });
