@@ -25,6 +25,16 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'user.management']);
         Permission::create(['name' => 'role.permission.management']);
         Permission::create(['name' => 'menu.management']);
+        Permission::create(['name' => 'book.management']);
+        Permission::create(['name' => 'peminjaman.management']);
+        Permission::create(['name' => 'pengembalian.management']);
+        Permission::create(['name' => 'peminjaman_user.management']);
+        Permission::create(['name' => 'pengembalian_user.management']);
+        Permission::create(['name' => 'books_user.management']);
+        Permission::create(['name' => 'denda.management']);
+        Permission::create(['name' => 'laporan.management']);
+        Permission::create(['name' => 'denda_user.management']);
+
         //user
         Permission::create(['name' => 'user.index']);
         Permission::create(['name' => 'user.create']);
@@ -60,6 +70,48 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'assign.user.create']);
         Permission::create(['name' => 'assign.user.edit']);
 
+        //assignbooks
+        Permission::create(['name' => 'book.index']);
+        Permission::create(['name' => 'book.create']);
+        Permission::create(['name' => 'book.edit']);
+        Permission::create(['name' => 'book.destroy']);
+
+        //assignpeminjaman
+        Permission::create(['name' => 'peminjaman.index']);
+        Permission::create(['name' => 'peminjaman.create']);
+        Permission::create(['name' => 'peminjaman.edit']);
+        Permission::create(['name' => 'peminjaman.destroy']);
+
+        //assignpengembalian
+        Permission::create(['name' => 'pengembalian.index']);
+        Permission::create(['name' => 'pengembalian.create']);
+        Permission::create(['name' => 'pengembalian.edit']);
+        Permission::create(['name' => 'pengembalian.destroy']);
+
+        //assignpeminjamanuser
+        Permission::create(['name' => 'peminjaman_user.index']);
+
+        //assignpengembalianuser
+        Permission::create(['name' => 'pengembalian_user.index']);
+
+        //assignbooksuser
+        Permission::create(['name' => 'books_user.index']);
+        Permission::create(['name' => 'books_user.pinjam']);
+
+        //assigndenda
+        Permission::create(['name' => 'denda.index']);
+        Permission::create(['name' => 'denda.create']);
+        Permission::create(['name' => 'denda.edit']);
+        Permission::create(['name' => 'denda.destroy']);
+
+        //assigndendauser
+        Permission::create(['name' => 'denda_user.index']);
+
+        //assignlaporan
+        Permission::create(['name' => 'laporan.index']);
+        Permission::create(['name' => 'laporan.create']);
+        Permission::create(['name' => 'laporan.edit']);
+        Permission::create(['name' => 'laporan.destroy']);
 
         // create roles 
         $roleUser = Role::create(['name' => 'user']);
@@ -67,11 +119,29 @@ class RoleAndPermissionSeeder extends Seeder
             'dashboard',
             'user.management',
             'user.index',
+            'books_user.management',
+            'books_user.index',
+            'books_user.pinjam',
+            'peminjaman_user.management',
+            'peminjaman_user.index',
+            'pengembalian_user.management',
+            'pengembalian_user.index',
+            'denda_user.management',
+            'denda_user.index',
         ]);
 
         // create Super Admin
         $role = Role::create(['name' => 'super-admin']);
         $role->givePermissionTo(Permission::all());
+        $role->revokePermissionTo('peminjaman_user.management');
+        $role->revokePermissionTo('peminjaman_user.index');
+        $role->revokePermissionTo('pengembalian_user.management');
+        $role->revokePermissionTo('pengembalian_user.index');
+        $role->revokePermissionTo('denda_user.management');
+        $role->revokePermissionTo('denda_user.index');
+        $role->revokePermissionTo('books_user.management');
+        $role->revokePermissionTo('books_user.index');
+        $role->revokePermissionTo('books_user.pinjam');
 
         //assign user id 1 ke super admin
         $user = User::find(1);
