@@ -135,7 +135,6 @@ class PeminjamanTest extends TestCase
         //menampilkan tulisan data terbaru
         $response->assertSeeText('SuperAdmin');
         $response->assertSeeText('24-06-2022');
-        $response->assertDontSeeText('user');
     }
 
     public function test_admin_can_delete_peminjaman()
@@ -169,7 +168,7 @@ class PeminjamanTest extends TestCase
         $response = $this->get('/peminjaman-management/peminjaman');
         $response->assertStatus(200);
         //tidak menampilkan tulisan user yang dihapus barusan
-        $response->assertDontSeeText('user');
+        $response->assertDontSeeText('123456789');
     }
 
     public function test_admin_cannot_open_peminjaman_user()

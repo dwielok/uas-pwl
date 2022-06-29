@@ -205,7 +205,7 @@ class PengembalianTest extends TestCase
         $response = $this->get('/pengembalian-management/pengembalian');
         $response->assertStatus(200);
         //tidak menampilkan tulisan user yang dihapus barusan
-        $response->assertDontSeeText('user');
+        $response->assertDontSeeText('123456789');
     }
 
     public function test_admin_cannot_open_pengembalian_di_user()
