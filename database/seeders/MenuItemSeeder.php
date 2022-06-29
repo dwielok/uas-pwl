@@ -66,6 +66,72 @@ class MenuItemSeeder extends Seeder
                     'permission_name' => 'menu-item.index',
                     'menu_group_id' => 4,
                 ],
+                [
+                    'name' => 'Book List',
+                    'route' => 'book-management/book',
+                    'permission_name' => 'book.index',
+                    'menu_group_id' => 5,
+                ],
+                [
+                    'name' => 'List Peminjaman',
+                    'route' => 'peminjaman-management/peminjaman',
+                    'permission_name' => 'peminjaman.index',
+                    'menu_group_id' => 6,
+                ],
+                [
+                    'name' => 'List Pengembalian',
+                    'route' => 'pengembalian-management/pengembalian',
+                    'permission_name' => 'pengembalian.index',
+                    'menu_group_id' => 7,
+                ],
+                [
+                    'name' => 'List Peminjaman User',
+                    'route' => 'peminjaman-user-management/peminjaman_user',
+                    'permission_name' => 'peminjaman_user.index',
+                    'menu_group_id' => 8,
+                ],
+                [
+                    'name' => 'Denda List',
+                    'route' => 'denda-management/denda',
+                    'permission_name' => 'denda.index',
+                    'menu_group_id' => 9,
+                ],
+                [
+                    'name' => 'List Pengembalian User',
+                    'route' => 'pengembalian-user-management/pengembalian_user',
+                    'permission_name' => 'pengembalian_user.index',
+                    'menu_group_id' => 10,
+                ],
+                [
+                    'name' => 'Book List User',
+                    'route' => 'book-user-management/book-user',
+                    'permission_name' => 'books_user.index',
+                    'menu_group_id' => 11,
+                ],
+                [
+                    'name' => 'Peminjaman per User',
+                    'route' => 'laporan-management/laporan/peminjaman_per_user',
+                    'permission_name' => 'laporan.peminjaman_per_user',
+                    'menu_group_id' => 12,
+                ],
+                [
+                    'name' => 'Pengembaian per User',
+                    'route' => 'laporan-management/laporan/pengembalian_per_user',
+                    'permission_name' => 'laporan.pengembalian_per_user',
+                    'menu_group_id' => 12,
+                ],
+                [
+                    'name' => 'Denda per User',
+                    'route' => 'laporan-management/laporan/denda_per_user',
+                    'permission_name' => 'laporan.denda_per_user',
+                    'menu_group_id' => 12,
+                ],
+                [
+                    'name' => 'Denda List User',
+                    'route' => 'denda-user-management/denda_user',
+                    'permission_name' => 'denda_user.index',
+                    'menu_group_id' => 13,
+                ]
             ]
         );
     }

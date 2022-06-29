@@ -51,6 +51,10 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'role.import']);
         Permission::create(['name' => 'role.export']);
 
+        //menu
+        Permission::create(['name' => 'menu-group.index']);
+        Permission::create(['name' => 'menu-item.index']);
+
         //permission
         Permission::create(['name' => 'permission.index']);
         Permission::create(['name' => 'permission.create']);
@@ -108,10 +112,9 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'denda_user.index']);
 
         //assignlaporan
-        Permission::create(['name' => 'laporan.index']);
-        Permission::create(['name' => 'laporan.create']);
-        Permission::create(['name' => 'laporan.edit']);
-        Permission::create(['name' => 'laporan.destroy']);
+        Permission::create(['name' => 'laporan.peminjaman_per_user']);
+        Permission::create(['name' => 'laporan.pengembalian_per_user']);
+        Permission::create(['name' => 'laporan.denda_per_user']);
 
         // create roles 
         $roleUser = Role::create(['name' => 'user']);

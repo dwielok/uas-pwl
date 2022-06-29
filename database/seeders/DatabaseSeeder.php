@@ -22,6 +22,10 @@ class DatabaseSeeder extends Seeder
             MenuGroupSeeder::class,
             MenuItemSeeder::class,
             CategorySeeder::class,
+            BookSeeder::class,
+            PeminjamanSeeder::class,
+            PengembalianSeeder::class,
+            DendaSeeder::class,
         ]);
     }
 }

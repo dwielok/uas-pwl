@@ -15,6 +15,8 @@ class BookListUserController extends Controller
         $this->middleware('permission:books_user.index')->only('index');
         $this->middleware('permission:books_user.pinjam')->only('pinjam', 'pinjam_action');
     }
+
+    
     /**
      * Display a listing of the resource.
      *
