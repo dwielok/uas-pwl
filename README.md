@@ -19,6 +19,26 @@ Check [Screenshots](screenshots/screenshots.md)
 5. [Ardhanika](https://github.com/ardhanika)
 6. Jaya Mahendra
 
+## Instalasi
+
+1. copy file .env.example menjadi .env
+2. ubah db_database di file .env
+3. jalankan ``php artisan key:generate``
+4. jalankan ``composer install``
+5. jalankan ``composer require barryvdh/laravel-dompdf``
+untuk membuat file pdf pada menu laporan management
+6. jalankan ``php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"``
+7. jalankan ``npm i``
+8. jalankan ``php artisan migrate:refresh --seed``
+saya sudah membuat seeder berupa menu group, menu item, book, peminjaman, pengembalian, dan denda. Untuk tampilan gambar pada list book perlu diedit manual pada button edit yang tersedia dengan memilih file gambar yang ingin diupload. sudah saya test pada windows dan linux berjalan lancar.
+
+## Additional Fitur
+
+1. laporan pdf pada menu laporan management (menu bagian bawah sendiri)
+2. unit testing
+3. crud 
+4. upload images dan file pdf
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
