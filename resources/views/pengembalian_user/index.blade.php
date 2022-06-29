@@ -82,7 +82,7 @@
                                             <th>Tanggal Batas Kembali</th>
                                             <th>Tanggal Kembali</th>
                                             <th>Status</th>
-                                            <th class="text-right">Action</th>
+                                            {{-- <th class="text-right">Action</th> --}}
                                         </tr>
                                         @foreach ($pengembalians as $key => $pengembalian)
                                             <tr>
